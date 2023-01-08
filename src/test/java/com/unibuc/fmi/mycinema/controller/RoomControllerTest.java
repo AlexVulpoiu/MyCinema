@@ -1,6 +1,7 @@
 package com.unibuc.fmi.mycinema.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.unibuc.fmi.mycinema.dto.RoomDetailsDto;
 import com.unibuc.fmi.mycinema.dto.RoomDto;
 import com.unibuc.fmi.mycinema.exception.EntityNotFoundException;
 import com.unibuc.fmi.mycinema.exception.UniqueConstraintException;
@@ -14,11 +15,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,6 +40,21 @@ public class RoomControllerTest {
         this.roomService = roomService;
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
+    }
+
+    @Test
+    public void getRoomsTest() throws Exception {
+        List<RoomDetailsDto> rooms = new ArrayList<>();
+        for(long i = 1; i <= 5; i++) {
+            rooms.add(RoomMocks.mockRoomDetailsDto(i));
+        }
+        when(roomService.getRooms()).thenReturn(rooms);
+
+        String roomsBody = objectMapper.writeValueAsString(rooms);
+        MvcResult result = mockMvc.perform(get("/rooms"))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertEquals(result.getResponse().getContentAsString(), roomsBody);
     }
 
     @Test

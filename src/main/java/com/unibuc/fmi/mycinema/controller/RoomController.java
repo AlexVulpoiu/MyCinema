@@ -18,6 +18,11 @@ public class RoomController {
         this.roomService = roomService;
     }
 
+    @GetMapping
+    public ResponseEntity<?> getRooms() {
+        return ResponseEntity.ok(roomService.getRooms());
+    }
+
     @PostMapping
     public ResponseEntity<?> addRoom(@Valid @RequestBody RoomDto roomDto) {
         return ResponseEntity.ok(roomService.addRoom(roomDto));
