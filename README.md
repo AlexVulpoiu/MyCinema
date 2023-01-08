@@ -6,7 +6,7 @@ MyCinema is a cinema-management app.
 * rooms management:
   * add, edit cinema rooms
 * actors management:
-  * add, edit, delete actors
+  * view, add, edit, delete actors
 * movies management:
   * add movies and schedule them to available rooms at specified date and time
   * search movies by name / date / genre
