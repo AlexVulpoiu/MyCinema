@@ -1,5 +1,6 @@
 package com.unibuc.fmi.mycinema.controller;
 
+import com.unibuc.fmi.mycinema.exception.BadRequestException;
 import com.unibuc.fmi.mycinema.exception.EntityNotFoundException;
 import com.unibuc.fmi.mycinema.exception.UniqueConstraintException;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,13 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<String> handleNotFoundException(Exception exception) {
         System.out.println(exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity<String> handleBadRequestException(Exception exception) {
+        System.out.println(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(exception.getMessage());
     }
 

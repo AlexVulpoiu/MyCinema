@@ -1,8 +1,9 @@
 package com.unibuc.fmi.mycinema.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.unibuc.fmi.mycinema.dto.ActorDetailsDto;
 import com.unibuc.fmi.mycinema.dto.ActorDto;
-import com.unibuc.fmi.mycinema.entity.Actor;
+import com.unibuc.fmi.mycinema.exception.BadRequestException;
 import com.unibuc.fmi.mycinema.exception.EntityNotFoundException;
 import com.unibuc.fmi.mycinema.exception.UniqueConstraintException;
 import com.unibuc.fmi.mycinema.service.impl.ActorServiceImpl;
@@ -44,9 +45,9 @@ public class ActorControllerTest {
 
     @Test
     public void getActorsTest() throws Exception {
-        List<Actor> actors = new ArrayList<>();
+        List<ActorDetailsDto> actors = new ArrayList<>();
         for(long i = 1; i <= 5; i++) {
-            actors.add(ActorMocks.mockActor(i));
+            actors.add(ActorMocks.mockActorDetailsDto(i));
         }
         when(actorService.getActors()).thenReturn(actors);
 
@@ -139,6 +140,15 @@ public class ActorControllerTest {
 
         mockMvc.perform(delete("/actors/1"))
                 .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    @Test
+    public void deleteActorThrowsBasRequestExceptionTest() throws Exception {
+        when(actorService.deleteActor(any())).thenThrow(new BadRequestException("This actor can't be deleted because he has roles in some movies!"));
+
+        mockMvc.perform(delete("/actors/1"))
+                .andExpect(status().isBadRequest())
                 .andReturn();
     }
 }

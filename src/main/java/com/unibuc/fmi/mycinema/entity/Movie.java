@@ -22,11 +22,12 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     private String description;
 
-    private String duration;
+    private Integer duration;
 
     private EGenre genre;
 

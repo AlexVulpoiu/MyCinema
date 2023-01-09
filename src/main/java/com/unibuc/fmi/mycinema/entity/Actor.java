@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,4 +22,7 @@ public class Actor {
 
     @Column(unique = true)
     private String name;
+    
+    @ManyToMany(mappedBy = "actors")
+    private List<Movie> movies;
 }

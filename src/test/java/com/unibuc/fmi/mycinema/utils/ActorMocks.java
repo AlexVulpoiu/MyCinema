@@ -1,7 +1,7 @@
 package com.unibuc.fmi.mycinema.utils;
 
+import com.unibuc.fmi.mycinema.dto.ActorDetailsDto;
 import com.unibuc.fmi.mycinema.dto.ActorDto;
-import com.unibuc.fmi.mycinema.entity.Actor;
 
 public class ActorMocks {
 
@@ -11,8 +11,8 @@ public class ActorMocks {
                 .build();
     }
 
-    public static Actor mockActor(Long id) {
-        return Actor.builder()
+    public static ActorDetailsDto mockActorDetailsDto(Long id) {
+        return ActorDetailsDto.builder()
                 .id(id)
                 .name("Test" + " name".repeat(id.intValue()))
                 .build();

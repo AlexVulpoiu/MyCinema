@@ -1,7 +1,9 @@
 package com.unibuc.fmi.mycinema.service.impl;
 
+import com.unibuc.fmi.mycinema.dto.ActorDetailsDto;
 import com.unibuc.fmi.mycinema.dto.ActorDto;
 import com.unibuc.fmi.mycinema.entity.Actor;
+import com.unibuc.fmi.mycinema.exception.BadRequestException;
 import com.unibuc.fmi.mycinema.exception.EntityNotFoundException;
 import com.unibuc.fmi.mycinema.exception.UniqueConstraintException;
 import com.unibuc.fmi.mycinema.mapper.ActorMapper;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ActorServiceImpl implements ActorService {
@@ -28,8 +31,8 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public List<Actor> getActors() {
-        return actorRepository.findAll();
+    public List<ActorDetailsDto> getActors() {
+        return actorRepository.findAll().stream().map(actorMapper::mapToActorDetailsDto).collect(Collectors.toList());
     }
 
     @Override
@@ -66,7 +69,13 @@ public class ActorServiceImpl implements ActorService {
             throw new EntityNotFoundException("There is no actor with id: " + id + "!");
         }
 
-        ActorDto actorDto = actorMapper.mapToActorDto(optionalActor.get());
+        Actor actor = optionalActor.get();
+
+        if(!actor.getMovies().isEmpty()) {
+            throw new BadRequestException("This actor can't be deleted because he has roles in some movies!");
+        }
+
+        ActorDto actorDto = actorMapper.mapToActorDto(actor);
         actorRepository.deleteById(id);
 
         return actorDto;
