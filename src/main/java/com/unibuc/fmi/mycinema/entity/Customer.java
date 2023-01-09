@@ -23,9 +23,8 @@ public class Customer {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
-
-    private String phone;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(

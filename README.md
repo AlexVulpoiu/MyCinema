@@ -11,7 +11,7 @@ MyCinema is a cinema-management app.
   * add movies and schedule them to available rooms at specified date and time
   * search movies by name / date / genre
 * customers management:
-  * add, edit customers
+  * add customers
   * search by name / email
 * orders management:
   * generate tickets for the selected seats, without exceeding room capacity
