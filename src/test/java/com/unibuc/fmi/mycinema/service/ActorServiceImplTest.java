@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -71,7 +72,7 @@ public class ActorServiceImplTest {
         when(actorRepository.findByName("Test actor")).thenReturn(Optional.of(actor));
 
         UniqueConstraintException uniqueConstraintException = assertThrows(UniqueConstraintException.class, () -> actorService.add(actorDto));
-        assertEquals("There is already an actor with the same name!", uniqueConstraintException.getMessage());
+        assertEquals(String.format(UNIQUE_CONSTRAINT, "actor", "name"), uniqueConstraintException.getMessage());
     }
 
     @Test
@@ -98,7 +99,7 @@ public class ActorServiceImplTest {
 
         when(actorRepository.findById(1L)).thenReturn(Optional.empty());
         EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> actorService.editActor(1L, actorDto));
-        assertEquals("There is no actor with id: 1!", entityNotFoundException.getMessage());
+        assertEquals(String.format(ENTITY_NOT_FOUND, "actor", "id", 1), entityNotFoundException.getMessage());
     }
 
     @Test
@@ -114,7 +115,7 @@ public class ActorServiceImplTest {
         when(actorRepository.findById(1L)).thenReturn(Optional.of(actor));
         when(actorRepository.findByName("Test actor edit")).thenReturn(Optional.of(testActor));
         UniqueConstraintException uniqueConstraintException = assertThrows(UniqueConstraintException.class, () -> actorService.editActor(1L, actorDto));
-        assertEquals("There is already an actor with the same name!", uniqueConstraintException.getMessage());
+        assertEquals(String.format(UNIQUE_CONSTRAINT, "actor", "name"), uniqueConstraintException.getMessage());
     }
 
     @Test
@@ -134,7 +135,7 @@ public class ActorServiceImplTest {
     public void deleteActorThrowsEntityNotFoundExceptionTest() {
         when(actorRepository.findById(1L)).thenReturn(Optional.empty());
         EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> actorService.deleteActor(1L));
-        assertEquals("There is no actor with id: 1!", entityNotFoundException.getMessage());
+        assertEquals(String.format(ENTITY_NOT_FOUND, "actor", "id", 1), entityNotFoundException.getMessage());
     }
 
     @Test
@@ -145,6 +146,6 @@ public class ActorServiceImplTest {
 
         when(actorRepository.findById(1L)).thenReturn(Optional.of(actor));
         BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> actorService.deleteActor(1L));
-        assertEquals("This actor can't be deleted because he has roles in some movies!", badRequestException.getMessage());
+        assertEquals(ACTOR_HAS_ROLES_IN_MOVIES, badRequestException.getMessage());
     }
 }

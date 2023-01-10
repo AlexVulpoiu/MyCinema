@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.ENTITY_NOT_FOUND;
+import static com.unibuc.fmi.mycinema.constants.Constants.UNIQUE_CONSTRAINT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -76,7 +78,7 @@ public class RoomControllerTest {
     @Test
     public void addRoomThrowsConflictExceptionTest() throws Exception {
         RoomDto roomDto = RoomMocks.mockRoomDto();
-        when(roomService.add(any())).thenThrow(new UniqueConstraintException("There is already a cinema room with the same name!"));
+        when(roomService.add(any())).thenThrow(new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "room", "name")));
 
         String roomDtoBody = objectMapper.writeValueAsString(roomDto);
         mockMvc.perform(post("/rooms")
@@ -104,7 +106,7 @@ public class RoomControllerTest {
     @Test
     public void editRoomThrowsNotFoundExceptionTest() throws Exception {
         RoomDto roomDto = RoomMocks.mockRoomDto();
-        when(roomService.editRoom(any(), any())).thenThrow(new EntityNotFoundException("There is no room with id: 1!"));
+        when(roomService.editRoom(any(), any())).thenThrow(new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "room", "id", 1)));
 
         String roomDtoBody = objectMapper.writeValueAsString(roomDto);
         mockMvc.perform(put("/rooms/1")
@@ -116,7 +118,7 @@ public class RoomControllerTest {
     @Test
     public void editRoomThrowsConflictExceptionTest() throws Exception {
         RoomDto roomDto = RoomMocks.mockRoomDto();
-        when(roomService.editRoom(any(), any())).thenThrow(new UniqueConstraintException("There is already a cinema room with the same name!"));
+        when(roomService.editRoom(any(), any())).thenThrow(new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "room", "name")));
 
         String roomDtoBody = objectMapper.writeValueAsString(roomDto);
         mockMvc.perform(put("/rooms/1")

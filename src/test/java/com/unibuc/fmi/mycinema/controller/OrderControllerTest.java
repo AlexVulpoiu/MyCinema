@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -62,7 +63,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsCustomerEntityNotFoundExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.add(any())).thenThrow(new EntityNotFoundException("There is no customer with email " + orderDto.getCustomerEmail() + "!"));
+        when(orderService.add(any())).thenThrow(new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "customer", "email", orderDto.getCustomerEmail())));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")
@@ -74,7 +75,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsMovieEntityNotFoundExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.add(any())).thenThrow(new EntityNotFoundException("There is no movie with name " + orderDto.getMovieName() + "!"));
+        when(orderService.add(any())).thenThrow(new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "movie", "name", orderDto.getMovieName())));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")
@@ -86,7 +87,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsRoomEntityNotFoundExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.add(any())).thenThrow(new EntityNotFoundException("There is no room with name " + orderDto.getRoomName() + "!"));
+        when(orderService.add(any())).thenThrow(new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "room", "name", orderDto.getRoomName())));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")
@@ -98,7 +99,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsMovieScheduleBadRequestExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.add(any())).thenThrow(new BadRequestException("The selected movie is not scheduled at the requested date and time!"));
+        when(orderService.add(any())).thenThrow(new BadRequestException(MOVIE_NOT_SCHEDULED));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")
@@ -110,7 +111,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsPastDateBadRequestExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.add(any())).thenThrow(new BadRequestException("You can't make a reservation in the past!"));
+        when(orderService.add(any())).thenThrow(new BadRequestException(PAST_RESERVATION));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")
@@ -122,7 +123,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsNotEnoughTicketsBadRequestExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.add(any())).thenThrow(new BadRequestException("There are not enough tickets to process your order!"));
+        when(orderService.add(any())).thenThrow(new BadRequestException(NOT_ENOUGH_TICKETS));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")

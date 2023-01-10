@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -67,7 +68,7 @@ public class MovieControllerTest {
     @Test
     public void addMovieThrowsUniqueConstraintException() throws Exception {
         NewMovieDto newMovieDto = MovieMocks.mockNewMovieDto();
-        when(movieService.add(newMovieDto)).thenThrow(new UniqueConstraintException("There is already a movie with the same name!"));
+        when(movieService.add(newMovieDto)).thenThrow(new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "movie", "name")));
 
         String newMovieDtoBody = objectMapper.writeValueAsString(newMovieDto);
         mockMvc.perform(post("/movies")
@@ -79,7 +80,7 @@ public class MovieControllerTest {
     @Test
     public void addMovieThrowsEntityNotFoundExceptionTest() throws Exception {
         NewMovieDto newMovieDto = MovieMocks.mockNewMovieDto();
-        when(movieService.add(newMovieDto)).thenThrow(new EntityNotFoundException("There is no actor with id: 1!"));
+        when(movieService.add(newMovieDto)).thenThrow(new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "actor", "id", 1)));
 
         String newMovieDtoBody = objectMapper.writeValueAsString(newMovieDto);
         mockMvc.perform(post("/movies")
@@ -124,7 +125,7 @@ public class MovieControllerTest {
     @Test
     public void scheduleMovieThrowsMovieEntityNotFoundExceptionTest() throws Exception {
         MovieScheduleDto movieScheduleDto = MovieScheduleMocks.mockMovieScheduleDto();
-        when(movieService.scheduleMovie(any())).thenThrow(new EntityNotFoundException("There is no movie with name: Test movie!"));
+        when(movieService.scheduleMovie(any())).thenThrow(new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "movie", "name", "Test movie")));
 
         String movieScheduleDtoBody = objectMapper.writeValueAsString(movieScheduleDto);
         mockMvc.perform(post("/movies/schedule")
@@ -136,7 +137,7 @@ public class MovieControllerTest {
     @Test
     public void scheduleMovieThrowsRoomEntityNotFoundExceptionTest() throws Exception {
         MovieScheduleDto movieScheduleDto = MovieScheduleMocks.mockMovieScheduleDto();
-        when(movieService.scheduleMovie(any())).thenThrow(new EntityNotFoundException("There is no room with name: Test room!"));
+        when(movieService.scheduleMovie(any())).thenThrow(new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "room", "name", "Test room")));
 
         String movieScheduleDtoBody = objectMapper.writeValueAsString(movieScheduleDto);
         mockMvc.perform(post("/movies/schedule")
@@ -148,7 +149,7 @@ public class MovieControllerTest {
     @Test
     public void scheduleMovieThrowsMovieBadRequestExceptionTest() throws Exception {
         MovieScheduleDto movieScheduleDto = MovieScheduleMocks.mockMovieScheduleDto();
-        when(movieService.scheduleMovie(any())).thenThrow(new BadRequestException("The movie can't be scheduled in a past date!"));
+        when(movieService.scheduleMovie(any())).thenThrow(new BadRequestException(PAST_DATE_SCHEDULE));
 
         String movieScheduleDtoBody = objectMapper.writeValueAsString(movieScheduleDto);
         mockMvc.perform(post("/movies/schedule")
@@ -160,7 +161,7 @@ public class MovieControllerTest {
     @Test
     public void scheduleMovieThrowsRoomBadRequestExceptionTest() throws Exception {
         MovieScheduleDto movieScheduleDto = MovieScheduleMocks.mockMovieScheduleDto();
-        when(movieService.scheduleMovie(any())).thenThrow(new BadRequestException("The room is not available at this hour!"));
+        when(movieService.scheduleMovie(any())).thenThrow(new BadRequestException(UNAVAILABLE_ROOM));
 
         String movieScheduleDtoBody = objectMapper.writeValueAsString(movieScheduleDto);
         mockMvc.perform(post("/movies/schedule")

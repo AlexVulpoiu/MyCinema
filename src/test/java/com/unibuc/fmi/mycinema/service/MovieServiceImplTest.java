@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -89,7 +90,7 @@ public class MovieServiceImplTest {
         when(movieRepository.findByName("Test movie")).thenReturn(Optional.of(movie));
 
         UniqueConstraintException uniqueConstraintException = assertThrows(UniqueConstraintException.class, () -> movieService.add(newMovieDto));
-        assertEquals("There is already a movie with the same name!", uniqueConstraintException.getMessage());
+        assertEquals(String.format(UNIQUE_CONSTRAINT, "movie", "name"), uniqueConstraintException.getMessage());
     }
 
     @Test
@@ -98,7 +99,7 @@ public class MovieServiceImplTest {
 
         when(actorRepository.findById(1L)).thenReturn(Optional.empty());
         EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> movieService.add(newMovieDto));
-        assertEquals("There is no actor with id: 1!", entityNotFoundException.getMessage());
+        assertEquals(String.format(ENTITY_NOT_FOUND, "actor", "id", 1), entityNotFoundException.getMessage());
     }
 
     @Test
@@ -157,7 +158,7 @@ public class MovieServiceImplTest {
 
         when(movieRepository.findByName("Test movie")).thenReturn(Optional.empty());
         EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> movieService.scheduleMovie(movieScheduleDto));
-        assertEquals("There is no movie with name: Test movie!", entityNotFoundException.getMessage());
+        assertEquals(String.format(ENTITY_NOT_FOUND, "movie", "name", "Test movie"), entityNotFoundException.getMessage());
     }
 
     @Test
@@ -168,7 +169,7 @@ public class MovieServiceImplTest {
         when(movieRepository.findByName("Test movie")).thenReturn(Optional.of(movie));
         when(roomRepository.findByName("Test room")).thenReturn(Optional.empty());
         EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> movieService.scheduleMovie(movieScheduleDto));
-        assertEquals("There is no room with name: Test room!", entityNotFoundException.getMessage());
+        assertEquals(String.format(ENTITY_NOT_FOUND, "room", "name", "Test room"), entityNotFoundException.getMessage());
     }
 
     @Test
@@ -181,7 +182,7 @@ public class MovieServiceImplTest {
         when(movieRepository.findByName("Test movie")).thenReturn(Optional.of(movie));
         when(roomRepository.findByName("Test room")).thenReturn(Optional.of(room));
         BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> movieService.scheduleMovie(movieScheduleDto));
-        assertEquals("The movie can't be scheduled in a past date!", badRequestException.getMessage());
+        assertEquals(PAST_DATE_SCHEDULE, badRequestException.getMessage());
     }
 
     @Test
@@ -194,6 +195,6 @@ public class MovieServiceImplTest {
         when(movieRepository.findByName("Test movie")).thenReturn(Optional.of(movie));
         when(roomRepository.findByName("Test room")).thenReturn(Optional.of(room));
         BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> movieService.scheduleMovie(movieScheduleDto));
-        assertEquals("The room is not available at this hour!", badRequestException.getMessage());
+        assertEquals(UNAVAILABLE_ROOM, badRequestException.getMessage());
     }
 }

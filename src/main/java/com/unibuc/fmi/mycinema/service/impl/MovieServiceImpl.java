@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.*;
+
 @Service
 public class MovieServiceImpl implements MovieService, CommonService<MovieDetailsDto, NewMovieDto> {
 
@@ -60,14 +62,14 @@ public class MovieServiceImpl implements MovieService, CommonService<MovieDetail
     public MovieDetailsDto add(NewMovieDto newMovieDto) {
         Optional<Movie> optionalMovie = movieRepository.findByName(newMovieDto.getName());
         if(optionalMovie.isPresent()) {
-            throw new UniqueConstraintException("There is already a movie with the same name!");
+            throw new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "movie", "name"));
         }
 
         List<Actor> actors = new ArrayList<>();
         for(Long actorId : newMovieDto.getActorIds()) {
             Optional<Actor> optionalActor = actorRepository.findById(actorId);
             if(optionalActor.isEmpty()) {
-                throw new EntityNotFoundException("There is no actor with id: " + actorId + "!");
+                throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "actor", "id", actorId));
             }
             actors.add(optionalActor.get());
         }
@@ -106,13 +108,13 @@ public class MovieServiceImpl implements MovieService, CommonService<MovieDetail
         String movieName = movieScheduleDto.getMovieName();
         Optional<Movie> optionalMovie = movieRepository.findByName(movieName);
         if(optionalMovie.isEmpty()) {
-            throw new EntityNotFoundException("There is no movie with name: " + movieName + "!");
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "movie", "name", movieName));
         }
 
         String roomName = movieScheduleDto.getRoomName();
         Optional<Room> optionalRoom = roomRepository.findByName(roomName);
         if(optionalRoom.isEmpty()) {
-            throw new EntityNotFoundException("There is no room with name: " + roomName + "!");
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "room", "name", roomName));
         }
 
         Movie movie = optionalMovie.get();
@@ -122,7 +124,7 @@ public class MovieServiceImpl implements MovieService, CommonService<MovieDetail
         LocalDateTime scheduleEndTime = scheduleStartTime.plusMinutes(movie.getDuration());
 
         if(scheduleStartTime.isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("The movie can't be scheduled in a past date!");
+            throw new BadRequestException(PAST_DATE_SCHEDULE);
         }
 
         Room room = optionalRoom.get();
@@ -130,7 +132,7 @@ public class MovieServiceImpl implements MovieService, CommonService<MovieDetail
             LocalDateTime startTime = LocalDateTime.of(movieSchedule.getId().getDate(), movieSchedule.getId().getHour());
             LocalDateTime endTime = startTime.plusMinutes(movieSchedule.getMovie().getDuration());
             if(scheduleStartTime.isBefore(endTime) && startTime.isBefore(scheduleEndTime)) {
-                throw new BadRequestException("The room is not available at this hour!");
+                throw new BadRequestException(UNAVAILABLE_ROOM);
             }
         }
 

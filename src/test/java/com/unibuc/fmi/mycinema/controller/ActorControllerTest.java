@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -75,7 +76,7 @@ public class ActorControllerTest {
     @Test
     public void addActorThrowsConflictExceptionTest() throws Exception {
         ActorDto actorDto = ActorMocks.mockActorDto();
-        when(actorService.add(any())).thenThrow(new UniqueConstraintException("There is already an actor with the same name!"));
+        when(actorService.add(any())).thenThrow(new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "actor", "name")));
 
         String actorDtoBody = objectMapper.writeValueAsString(actorDto);
         mockMvc.perform(post("/actors")
@@ -101,7 +102,7 @@ public class ActorControllerTest {
     @Test
     public void editActorThrowsNotFoundExceptionTest() throws Exception {
         ActorDto actorDto = ActorMocks.mockActorDto();
-        when(actorService.editActor(any(), any())).thenThrow(new EntityNotFoundException("There is no actor with id: 1!"));
+        when(actorService.editActor(any(), any())).thenThrow(new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "actor", "id", 1)));
 
         String actorDtoBody = objectMapper.writeValueAsString(actorDto);
         mockMvc.perform(put("/actors/1")
@@ -113,7 +114,7 @@ public class ActorControllerTest {
     @Test
     public void editActorThrowsConflictExceptionTest() throws Exception {
         ActorDto actorDto = ActorMocks.mockActorDto();
-        when(actorService.editActor(any(), any())).thenThrow(new UniqueConstraintException("There is already an actor with the same name!"));
+        when(actorService.editActor(any(), any())).thenThrow(new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "actor", "name")));
 
         String actorDtoBody = objectMapper.writeValueAsString(actorDto);
         mockMvc.perform(put("/actors/1")
@@ -136,7 +137,7 @@ public class ActorControllerTest {
 
     @Test
     public void deleteActorThrowsNotFoundExceptionTest() throws Exception {
-        when(actorService.deleteActor(any())).thenThrow(new EntityNotFoundException("There is no actor with id 1!"));
+        when(actorService.deleteActor(any())).thenThrow(new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "actor", "id", 1)));
 
         mockMvc.perform(delete("/actors/1"))
                 .andExpect(status().isNotFound())
@@ -145,7 +146,7 @@ public class ActorControllerTest {
 
     @Test
     public void deleteActorThrowsBasRequestExceptionTest() throws Exception {
-        when(actorService.deleteActor(any())).thenThrow(new BadRequestException("This actor can't be deleted because he has roles in some movies!"));
+        when(actorService.deleteActor(any())).thenThrow(new BadRequestException(ACTOR_HAS_ROLES_IN_MOVIES));
 
         mockMvc.perform(delete("/actors/1"))
                 .andExpect(status().isBadRequest())

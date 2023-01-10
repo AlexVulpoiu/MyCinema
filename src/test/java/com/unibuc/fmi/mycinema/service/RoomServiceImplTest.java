@@ -18,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.ENTITY_NOT_FOUND;
+import static com.unibuc.fmi.mycinema.constants.Constants.UNIQUE_CONSTRAINT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -69,7 +71,7 @@ public class RoomServiceImplTest {
         when(roomRepository.findByName("Test room")).thenReturn(Optional.of(room));
 
         UniqueConstraintException uniqueConstraintException = assertThrows(UniqueConstraintException.class, () -> roomService.add(roomDto));
-        assertEquals("There is already a cinema room with the same name!", uniqueConstraintException.getMessage());
+        assertEquals(String.format(UNIQUE_CONSTRAINT, "room", "name"), uniqueConstraintException.getMessage());
     }
 
     @Test
@@ -96,7 +98,7 @@ public class RoomServiceImplTest {
 
         when(roomRepository.findById(1L)).thenReturn(Optional.empty());
         EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> roomService.editRoom(1L, roomDto));
-        assertEquals("There is no room with id: 1!", entityNotFoundException.getMessage());
+        assertEquals(String.format(ENTITY_NOT_FOUND, "room", "id", 1), entityNotFoundException.getMessage());
     }
 
     @Test
@@ -112,6 +114,6 @@ public class RoomServiceImplTest {
         when(roomRepository.findById(1L)).thenReturn(Optional.of(room));
         when(roomRepository.findByName("Test room edit")).thenReturn(Optional.of(testRoom));
         UniqueConstraintException uniqueConstraintException = assertThrows(UniqueConstraintException.class, () -> roomService.editRoom(1L, roomDto));
-        assertEquals("There is already a cinema room with the same name!", uniqueConstraintException.getMessage());
+        assertEquals(String.format(UNIQUE_CONSTRAINT, "room", "name"), uniqueConstraintException.getMessage());
     }
 }

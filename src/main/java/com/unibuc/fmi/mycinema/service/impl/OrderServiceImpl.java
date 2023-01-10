@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.*;
+
 @Service
 public class OrderServiceImpl implements CommonService<OrderDetailsDto, OrderDto> {
 
@@ -53,17 +55,17 @@ public class OrderServiceImpl implements CommonService<OrderDetailsDto, OrderDto
     public OrderDetailsDto add(OrderDto orderDto) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(orderDto.getCustomerEmail());
         if(optionalCustomer.isEmpty()) {
-            throw new EntityNotFoundException("There is no customer with email " + orderDto.getCustomerEmail() + "!");
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "customer", "email", orderDto.getCustomerEmail()));
         }
 
         Optional<Movie> optionalMovie = movieRepository.findByName(orderDto.getMovieName());
         if(optionalMovie.isEmpty()) {
-            throw new EntityNotFoundException("There is no movie with name " + orderDto.getMovieName() + "!");
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "movie", "name", orderDto.getMovieName()));
         }
 
         Optional<Room> optionalRoom = roomRepository.findByName(orderDto.getRoomName());
         if(optionalRoom.isEmpty()) {
-            throw new EntityNotFoundException("There is no room with name " + orderDto.getRoomName() + "!");
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "room", "name", orderDto.getRoomName()));
         }
 
         Movie movie = optionalMovie.get();
@@ -76,18 +78,18 @@ public class OrderServiceImpl implements CommonService<OrderDetailsDto, OrderDto
                 .build();
         Optional<MovieSchedule> optionalMovieSchedule = movieScheduleRepository.findById(movieScheduleId);
         if(optionalMovieSchedule.isEmpty()) {
-            throw new BadRequestException("The selected movie is not scheduled at the requested date and time!");
+            throw new BadRequestException(MOVIE_NOT_SCHEDULED);
         }
 
         if(LocalDateTime.of(orderDto.getMovieDate(), orderDto.getMovieHour()).isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("You can't make a reservation in the past!");
+            throw new BadRequestException(PAST_RESERVATION);
         }
 
         MovieSchedule movieSchedule = optionalMovieSchedule.get();
         int roomCapacity = room.getNumberOfRows() * room.getSeatsPerRow();
         int soldTickets = movieSchedule.getTickets().size();
         if(roomCapacity - soldTickets < orderDto.getNumberOfTickets()) {
-            throw new BadRequestException("There are not enough tickets to process your order!");
+            throw new BadRequestException(NOT_ENOUGH_TICKETS);
         }
 
         Optional<Ticket> optionalLastTicket = ticketRepository.findLastTicketForMovie(movieSchedule);

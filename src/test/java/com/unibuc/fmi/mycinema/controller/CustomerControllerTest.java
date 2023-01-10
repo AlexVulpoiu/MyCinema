@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.CUSTOMERS_NOT_FOUND;
+import static com.unibuc.fmi.mycinema.constants.Constants.UNIQUE_CONSTRAINT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -59,7 +61,7 @@ public class CustomerControllerTest {
     @Test
     public void addCustomerThrowsUniqueConstraintExceptionTest() throws Exception {
         CustomerDto customerDto = CustomerMocks.mockCustomerDto();
-        when(customerService.add(any())).thenThrow(new UniqueConstraintException("There is already a customer with the same email address!"));
+        when(customerService.add(any())).thenThrow(new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "customer", "name")));
 
         String customerDtoBody = objectMapper.writeValueAsString(customerDto);
         mockMvc.perform(post("/customers")
@@ -82,7 +84,7 @@ public class CustomerControllerTest {
 
     @Test
     public void searchCustomersThrowsEntityNotFoundExceptionTest() throws Exception {
-        when(customerService.searchCustomers(any())).thenThrow(new EntityNotFoundException("There are no customers whose name or email contains test!"));
+        when(customerService.searchCustomers(any())).thenThrow(new EntityNotFoundException(String.format(CUSTOMERS_NOT_FOUND, "test")));
         mockMvc.perform(get("/customers").requestAttr("searchParam", "test"))
                 .andExpect(status().isNotFound())
                 .andReturn();

@@ -17,6 +17,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.ENTITY_NOT_FOUND;
+import static com.unibuc.fmi.mycinema.constants.Constants.UNIQUE_CONSTRAINT;
+
 @Service
 public class RoomServiceImpl implements RoomService, CommonService<RoomDto, RoomDto> {
 
@@ -39,7 +42,7 @@ public class RoomServiceImpl implements RoomService, CommonService<RoomDto, Room
     public RoomDto add(RoomDto roomDto) {
         Optional<Room> optionalRoom = roomRepository.findByName(roomDto.getName());
         if(optionalRoom.isPresent()) {
-            throw new UniqueConstraintException("There is already a cinema room with the same name!");
+            throw new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "room", "name"));
         }
         return roomMapper.mapToRoomDto(roomRepository.save(roomMapper.mapToRoom(roomDto)));
     }
@@ -48,12 +51,12 @@ public class RoomServiceImpl implements RoomService, CommonService<RoomDto, Room
     public RoomDto editRoom(Long id, RoomDto roomDto) {
         Optional<Room> optionalRoom = roomRepository.findById(id);
         if(optionalRoom.isEmpty()) {
-            throw new EntityNotFoundException("There is no room with id: " + id + "!");
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "room", "id", id));
         }
 
         Optional<Room> optionalRoomByName = roomRepository.findByName(roomDto.getName());
         if(optionalRoomByName.isPresent() && !Objects.equals(optionalRoomByName.get().getId(), id)) {
-            throw new UniqueConstraintException("There is already a cinema room with the same name!");
+            throw new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "room", "name"));
         }
 
         Room room = optionalRoom.get();

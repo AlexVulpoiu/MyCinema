@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.CUSTOMERS_NOT_FOUND;
+import static com.unibuc.fmi.mycinema.constants.Constants.UNIQUE_CONSTRAINT;
+
 @Service
 public class CustomerServiceImpl implements CustomerService, CommonService<CustomerDto, CustomerDto> {
 
@@ -31,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService, CommonService<Custo
     public CustomerDto add(CustomerDto customerDto) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(customerDto.getEmail());
         if(optionalCustomer.isPresent()) {
-            throw new UniqueConstraintException("There is already a customer with the same email address!");
+            throw new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "customer", "email"));
         }
         return customerMapper.mapToCustomerDto(customerRepository.save(customerMapper.mapToCustomer(customerDto)));
     }
@@ -45,7 +48,7 @@ public class CustomerServiceImpl implements CustomerService, CommonService<Custo
         searchParam = searchParam.toLowerCase();
         List<Customer> customers = customerRepository.searchByNameOrEmail(searchParam);
         if(customers.isEmpty()) {
-            throw new EntityNotFoundException("There are no customers whose name or email contains " + searchParam + "!");
+            throw new EntityNotFoundException(String.format(CUSTOMERS_NOT_FOUND, searchParam));
         }
         return customers.stream().map(customerMapper::mapToCustomerDto).toList();
     }

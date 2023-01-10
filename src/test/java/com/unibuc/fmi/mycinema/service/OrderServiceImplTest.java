@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -81,7 +82,7 @@ public class OrderServiceImplTest {
     public void addOrderThrowsCustomerEntityNotFoundException() {
         OrderDto orderDto = OrderMocks.mockOrderDto();
         EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> orderService.add(orderDto));
-        assertEquals("There is no customer with email test@gmail.com!", entityNotFoundException.getMessage());
+        assertEquals(String.format(ENTITY_NOT_FOUND, "customer", "email", orderDto.getCustomerEmail()), entityNotFoundException.getMessage());
     }
 
     @Test
@@ -91,7 +92,7 @@ public class OrderServiceImplTest {
 
         when(customerRepository.findByEmail("test@gmail.com")).thenReturn(Optional.of(customer));
         EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> orderService.add(orderDto));
-        assertEquals("There is no movie with name Test movie!", entityNotFoundException.getMessage());
+        assertEquals(String.format(ENTITY_NOT_FOUND, "movie", "name", "Test movie"), entityNotFoundException.getMessage());
     }
 
     @Test
@@ -103,7 +104,7 @@ public class OrderServiceImplTest {
         when(customerRepository.findByEmail("test@gmail.com")).thenReturn(Optional.of(customer));
         when(movieRepository.findByName(movie.getName())).thenReturn(Optional.of(movie));
         EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> orderService.add(orderDto));
-        assertEquals("There is no room with name Test room!", entityNotFoundException.getMessage());
+        assertEquals(String.format(ENTITY_NOT_FOUND, "room", "name", "Test room"), entityNotFoundException.getMessage());
     }
 
     @Test
@@ -119,7 +120,7 @@ public class OrderServiceImplTest {
         when(movieRepository.findByName(movie.getName())).thenReturn(Optional.of(movie));
         when(roomRepository.findByName(room.getName())).thenReturn(Optional.of(room));
         BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> orderService.add(orderDto));
-        assertEquals("The selected movie is not scheduled at the requested date and time!", badRequestException.getMessage());
+        assertEquals(MOVIE_NOT_SCHEDULED, badRequestException.getMessage());
     }
 
     @Test
@@ -138,7 +139,7 @@ public class OrderServiceImplTest {
         when(roomRepository.findByName(room.getName())).thenReturn(Optional.of(room));
         when(movieScheduleRepository.findById(movieScheduleId)).thenReturn(Optional.of(movieSchedule));
         BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> orderService.add(orderDto));
-        assertEquals("You can't make a reservation in the past!", badRequestException.getMessage());
+        assertEquals(PAST_RESERVATION, badRequestException.getMessage());
     }
 
     @Test
@@ -156,6 +157,6 @@ public class OrderServiceImplTest {
         when(roomRepository.findByName(room.getName())).thenReturn(Optional.of(room));
         when(movieScheduleRepository.findById(movieScheduleId)).thenReturn(Optional.of(movieSchedule));
         BadRequestException badRequestException = assertThrows(BadRequestException.class, () -> orderService.add(orderDto));
-        assertEquals("There are not enough tickets to process your order!", badRequestException.getMessage());
+        assertEquals(NOT_ENOUGH_TICKETS, badRequestException.getMessage());
     }
 }

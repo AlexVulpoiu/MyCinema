@@ -18,6 +18,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.*;
+
 @Service
 public class ActorServiceImpl implements ActorService, CommonService<ActorDto, ActorDto> {
 
@@ -40,7 +42,7 @@ public class ActorServiceImpl implements ActorService, CommonService<ActorDto, A
     public ActorDto add(ActorDto actorDto) {
         Optional<Actor> optionalActor = actorRepository.findByName(actorDto.getName());
         if(optionalActor.isPresent()) {
-            throw new UniqueConstraintException("There is already an actor with the same name!");
+            throw new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "actor", "name"));
         }
         return actorMapper.mapToActorDto(actorRepository.save(actorMapper.mapToActor(actorDto)));
     }
@@ -49,12 +51,12 @@ public class ActorServiceImpl implements ActorService, CommonService<ActorDto, A
     public ActorDto editActor(Long id, ActorDto actorDto) {
         Optional<Actor> optionalActor = actorRepository.findById(id);
         if(optionalActor.isEmpty()) {
-            throw new EntityNotFoundException("There is no actor with id: " + id + "!");
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "actor", "id", id));
         }
 
         Optional<Actor> optionalActorByName = actorRepository.findByName(actorDto.getName());
         if(optionalActorByName.isPresent() && !Objects.equals(optionalActorByName.get().getId(), id)) {
-            throw new UniqueConstraintException("There is already an actor with the same name!");
+            throw new UniqueConstraintException(String.format(UNIQUE_CONSTRAINT, "actor", "name"));
         }
 
         Actor actor = optionalActor.get();
@@ -67,13 +69,13 @@ public class ActorServiceImpl implements ActorService, CommonService<ActorDto, A
     public ActorDto deleteActor(Long id) {
         Optional<Actor> optionalActor = actorRepository.findById(id);
         if(optionalActor.isEmpty()) {
-            throw new EntityNotFoundException("There is no actor with id: " + id + "!");
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND, "actor", "id", id));
         }
 
         Actor actor = optionalActor.get();
 
         if(!actor.getMovies().isEmpty()) {
-            throw new BadRequestException("This actor can't be deleted because he has roles in some movies!");
+            throw new BadRequestException(ACTOR_HAS_ROLES_IN_MOVIES);
         }
 
         ActorDto actorDto = actorMapper.mapToActorDto(actor);

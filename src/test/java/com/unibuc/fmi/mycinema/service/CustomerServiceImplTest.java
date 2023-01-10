@@ -17,6 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.unibuc.fmi.mycinema.constants.Constants.CUSTOMERS_NOT_FOUND;
+import static com.unibuc.fmi.mycinema.constants.Constants.UNIQUE_CONSTRAINT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -54,7 +56,7 @@ public class CustomerServiceImplTest {
 
         when(customerRepository.findByEmail("test@gmail.com")).thenReturn(Optional.of(customer));
         UniqueConstraintException uniqueConstraintException = assertThrows(UniqueConstraintException.class, () -> customerService.add(customerDto));
-        assertEquals("There is already a customer with the same email address!", uniqueConstraintException.getMessage());
+        assertEquals(String.format(UNIQUE_CONSTRAINT, "customer", "email"), uniqueConstraintException.getMessage());
     }
 
     @Test
@@ -88,6 +90,6 @@ public class CustomerServiceImplTest {
     @Test
     public void searchCustomersThrowsEntityNotFoundExceptionTest() {
         EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class, () -> customerService.searchCustomers("test"));
-        assertEquals("There are no customers whose name or email contains test!", entityNotFoundException.getMessage());
+        assertEquals(String.format(CUSTOMERS_NOT_FOUND, "test"), entityNotFoundException.getMessage());
     }
 }
