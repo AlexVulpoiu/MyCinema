@@ -1,9 +1,7 @@
 package com.unibuc.fmi.mycinema.utils;
 
-import com.unibuc.fmi.mycinema.dto.MovieDetailsDto;
-import com.unibuc.fmi.mycinema.dto.MovieScheduleDto;
-import com.unibuc.fmi.mycinema.dto.MoviesFiltersDto;
-import com.unibuc.fmi.mycinema.dto.NewMovieDto;
+import com.unibuc.fmi.mycinema.dto.*;
+import com.unibuc.fmi.mycinema.entity.Actor;
 import com.unibuc.fmi.mycinema.entity.Movie;
 import com.unibuc.fmi.mycinema.enums.EGenre;
 
@@ -17,7 +15,7 @@ public class MovieMocks {
     public static NewMovieDto mockNewMovieDto() {
         return NewMovieDto.builder()
                 .name("Test movie")
-                .description("Movie description")
+                .description("Test description")
                 .genre(EGenre.DRAMA)
                 .duration(80)
                 .actorIds(List.of(1L))
@@ -28,10 +26,17 @@ public class MovieMocks {
         return MovieDetailsDto.builder()
                 .name("Test movie")
                 .description("Movie description")
-                .genre(EGenre.DRAMA)
+                .genre(EGenre.ADVENTURE)
                 .duration(80)
                 .actors(List.of(ActorMocks.mockActorDto()))
-                .scheduleDetails(List.of())
+                .scheduleDetails(List.of(
+                        MovieDetailsDto.ScheduleDetails.builder()
+                                .roomName("Test room")
+                                .date(LocalDate.now().plusDays(2))
+                                .hour(LocalTime.now())
+                                .price(16)
+                                .build()
+                ))
                 .build();
     }
 
@@ -43,24 +48,25 @@ public class MovieMocks {
                 .build();
     }
 
-    public static MovieScheduleDto mockMovieScheduleDto() {
-        return MovieScheduleDto.builder()
-                .movieName("Test movie")
-                .roomName("Test room")
-                .date(LocalDate.of(2023, 4, 22))
-                .hour(LocalTime.of(20, 0, 30))
-                .price(18)
-                .build();
-    }
-
     public static Movie mockMovie() {
         return Movie.builder()
+                .id(1L)
                 .name("Test movie")
                 .description("Test description")
                 .duration(100)
                 .genre(EGenre.ADVENTURE)
                 .actors(new ArrayList<>())
                 .schedules(new ArrayList<>())
+                .build();
+    }
+
+    public static MovieDto mockMovieDto(List<Actor> actors) {
+        return MovieDto.builder()
+                .name("Test movie")
+                .description("Test description")
+                .duration(100)
+                .genre(EGenre.ADVENTURE)
+                .actors(actors)
                 .build();
     }
 }
