@@ -17,7 +17,7 @@ public class CustomerDto {
     @OnlyLetters
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "The email address must be provided!")
     @Email(message = "The email should have an adequate format!")
     private String email;
 }

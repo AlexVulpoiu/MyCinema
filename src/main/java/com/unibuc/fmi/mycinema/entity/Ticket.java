@@ -21,4 +21,7 @@ public class Ticket {
     private Integer numberOfRow;
 
     private Integer seat;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MovieSchedule movieSchedule;
 }

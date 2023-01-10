@@ -31,16 +31,6 @@ public class MovieSchedule {
     @ManyToOne
     private Room room;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinTable(
-            name = "movie_tickets",
-            joinColumns = {
-                    @JoinColumn(name = "movie_id", referencedColumnName = "movie_id"),
-                    @JoinColumn(name = "room_id", referencedColumnName = "room_id"),
-                    @JoinColumn(name = "date", referencedColumnName = "date"),
-                    @JoinColumn(name = "hour", referencedColumnName = "hour")
-            },
-            inverseJoinColumns = @JoinColumn(name = "ticket_id")
-    )
+    @OneToMany(mappedBy = "movieSchedule", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Ticket> tickets = new ArrayList<>();
 }
