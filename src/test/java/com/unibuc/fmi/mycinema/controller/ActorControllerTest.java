@@ -67,7 +67,7 @@ public class ActorControllerTest {
         MvcResult result = mockMvc.perform(post("/actors")
                 .content(actorDtoBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Test name"))
+                .andExpect(jsonPath("$.name").value(actorDto.getName()))
                 .andReturn();
         assertEquals(result.getResponse().getContentAsString(), actorDtoBody);
     }
@@ -93,7 +93,7 @@ public class ActorControllerTest {
         MvcResult result = mockMvc.perform(put("/actors/1")
                         .content(actorDtoBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Test name"))
+                .andExpect(jsonPath("$.name").value(actorDto.getName()))
                 .andReturn();
         assertEquals(result.getResponse().getContentAsString(), actorDtoBody);
     }

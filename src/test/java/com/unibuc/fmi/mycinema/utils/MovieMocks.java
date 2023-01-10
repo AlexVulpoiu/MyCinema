@@ -4,10 +4,12 @@ import com.unibuc.fmi.mycinema.dto.MovieDetailsDto;
 import com.unibuc.fmi.mycinema.dto.MovieScheduleDto;
 import com.unibuc.fmi.mycinema.dto.MoviesFiltersDto;
 import com.unibuc.fmi.mycinema.dto.NewMovieDto;
+import com.unibuc.fmi.mycinema.entity.Movie;
 import com.unibuc.fmi.mycinema.enums.EGenre;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieMocks {
@@ -48,6 +50,17 @@ public class MovieMocks {
                 .date(LocalDate.of(2023, 4, 22))
                 .hour(LocalTime.of(20, 0, 30))
                 .price(18)
+                .build();
+    }
+
+    public static Movie mockMovie() {
+        return Movie.builder()
+                .name("Test movie")
+                .description("Test description")
+                .duration(100)
+                .genre(EGenre.ADVENTURE)
+                .actors(new ArrayList<>())
+                .schedules(new ArrayList<>())
                 .build();
     }
 }
