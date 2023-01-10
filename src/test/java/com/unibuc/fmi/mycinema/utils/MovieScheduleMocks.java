@@ -8,6 +8,7 @@ import com.unibuc.fmi.mycinema.entity.Room;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class MovieScheduleMocks {
 
@@ -27,6 +28,7 @@ public class MovieScheduleMocks {
                 .movie(movie)
                 .room(room)
                 .price(18)
+                .tickets(new ArrayList<>())
                 .build();
     }
 

@@ -145,6 +145,7 @@ public class MovieServiceImpl implements MovieService, CommonService<MovieDetail
                 .price(movieScheduleDto.getPrice())
                 .movie(movie)
                 .room(room)
+                .tickets(new ArrayList<>())
                 .build();
         return movieScheduleMapper.mapToMovieScheduleDto(movieScheduleRepository.save(movieSchedule));
     }

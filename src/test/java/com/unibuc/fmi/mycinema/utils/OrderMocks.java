@@ -2,6 +2,8 @@ package com.unibuc.fmi.mycinema.utils;
 
 import com.unibuc.fmi.mycinema.dto.OrderDetailsDto;
 import com.unibuc.fmi.mycinema.dto.OrderDto;
+import com.unibuc.fmi.mycinema.entity.Order;
+import com.unibuc.fmi.mycinema.entity.Ticket;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,8 +17,8 @@ public class OrderMocks {
                 .numberOfTickets(1)
                 .movieName("Test movie")
                 .roomName("Test room")
-                .movieDate(LocalDate.now().plusDays(1))
-                .movieHour(LocalTime.now())
+                .movieDate(LocalDate.of(2023, 4, 22))
+                .movieHour(LocalTime.of(20, 0, 30))
                 .build();
     }
 
@@ -24,12 +26,21 @@ public class OrderMocks {
         return OrderDetailsDto.builder()
                 .movieName("Test movie")
                 .roomName("Test room")
-                .movieDate(LocalDate.now().plusDays(1))
-                .movieHour(LocalTime.now())
+                .movieDate(LocalDate.of(2023, 4, 22))
+                .movieHour(LocalTime.of(20, 0, 30))
                 .purchaseDate(LocalDate.now())
                 .purchaseTime(LocalTime.now())
                 .totalPrice(20)
                 .tickets(List.of(TicketMocks.mockTicketDto()))
+                .build();
+    }
+
+    public static Order mockOrder(Integer totalPrice, List<Ticket> tickets) {
+        return Order.builder()
+                .date(LocalDate.now())
+                .hour(LocalTime.now())
+                .totalPrice(totalPrice)
+                .tickets(tickets)
                 .build();
     }
 }
