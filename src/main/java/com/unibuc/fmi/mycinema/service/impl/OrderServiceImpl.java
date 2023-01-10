@@ -9,6 +9,7 @@ import com.unibuc.fmi.mycinema.exception.EntityNotFoundException;
 import com.unibuc.fmi.mycinema.mapper.OrderMapper;
 import com.unibuc.fmi.mycinema.repository.*;
 import com.unibuc.fmi.mycinema.service.CommonService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,7 @@ public class OrderServiceImpl implements CommonService<OrderDetailsDto, OrderDto
     }
 
     @Override
+    @Transactional
     public OrderDetailsDto add(OrderDto orderDto) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(orderDto.getCustomerEmail());
         if(optionalCustomer.isEmpty()) {
