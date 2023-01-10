@@ -36,7 +36,7 @@ public class MovieController {
             @ApiResponse(responseCode = "404", description = "Not found exception. One of the actors specified for this movie doesn't exist in database"),
             @ApiResponse(responseCode = "409", description = "Conflict exception. There can't be 2 movies with the same name")
     })
-    public ResponseEntity<MovieDetailsDto> addMovie(@Valid @RequestBody NewMovieDto movieDto) {
+    public ResponseEntity<MovieDetailsDto> addMovie(@Parameter(description = "movie details") @Valid @RequestBody NewMovieDto movieDto) {
         return ResponseEntity.ok(movieService.add(movieDto));
     }
 
