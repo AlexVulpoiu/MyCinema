@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
@@ -19,12 +21,12 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addCustomer(@Valid @RequestBody CustomerDto customerDto) {
+    public ResponseEntity<CustomerDto> addCustomer(@Valid @RequestBody CustomerDto customerDto) {
         return ResponseEntity.ok(customerService.addCustomer(customerDto));
     }
 
     @GetMapping
-    public ResponseEntity<?> searchCustomers(@RequestParam(required = false) String searchParam) {
+    public ResponseEntity<List<CustomerDto>> searchCustomers(@RequestParam(required = false) String searchParam) {
         return ResponseEntity.ok(customerService.searchCustomers(searchParam));
     }
 }

@@ -1,5 +1,6 @@
 package com.unibuc.fmi.mycinema.controller;
 
+import com.unibuc.fmi.mycinema.dto.OrderDetailsDto;
 import com.unibuc.fmi.mycinema.dto.OrderDto;
 import com.unibuc.fmi.mycinema.service.impl.OrderServiceImpl;
 import jakarta.validation.Valid;
@@ -22,7 +23,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addOrder(@Valid @RequestBody OrderDto orderDto) {
+    public ResponseEntity<OrderDetailsDto> addOrder(@Valid @RequestBody OrderDto orderDto) {
         return ResponseEntity.ok(orderService.addOrder(orderDto));
     }
 }
