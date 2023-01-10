@@ -66,7 +66,7 @@ public class RoomControllerTest {
         MvcResult result = mockMvc.perform(post("/rooms")
                         .content(roomDtoBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Test name"))
+                .andExpect(jsonPath("$.name").value(roomDto.getName()))
                 .andExpect(jsonPath("$.numberOfRows").value(12))
                 .andExpect(jsonPath("$.seatsPerRow").value(10))
                 .andReturn();
@@ -94,7 +94,7 @@ public class RoomControllerTest {
         MvcResult result = mockMvc.perform(put("/rooms/1")
                         .content(roomDtoBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Test name"))
+                .andExpect(jsonPath("$.name").value(roomDto.getName()))
                 .andExpect(jsonPath("$.numberOfRows").value(12))
                 .andExpect(jsonPath("$.seatsPerRow").value(10))
                 .andReturn();
