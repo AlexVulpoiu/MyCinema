@@ -44,7 +44,7 @@ public class CustomerControllerTest {
     @Test
     public void addCustomerTest() throws Exception {
         CustomerDto customerDto = CustomerMocks.mockCustomerDto();
-        when(customerService.addCustomer(any())).thenReturn(customerDto);
+        when(customerService.add(any())).thenReturn(customerDto);
 
         String customerDtoBody = objectMapper.writeValueAsString(customerDto);
         MvcResult result = mockMvc.perform(post("/customers")
@@ -59,7 +59,7 @@ public class CustomerControllerTest {
     @Test
     public void addCustomerThrowsUniqueConstraintExceptionTest() throws Exception {
         CustomerDto customerDto = CustomerMocks.mockCustomerDto();
-        when(customerService.addCustomer(any())).thenThrow(new UniqueConstraintException("There is already a customer with the same email address!"));
+        when(customerService.add(any())).thenThrow(new UniqueConstraintException("There is already a customer with the same email address!"));
 
         String customerDtoBody = objectMapper.writeValueAsString(customerDto);
         mockMvc.perform(post("/customers")

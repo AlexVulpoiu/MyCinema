@@ -6,6 +6,7 @@ import com.unibuc.fmi.mycinema.exception.EntityNotFoundException;
 import com.unibuc.fmi.mycinema.exception.UniqueConstraintException;
 import com.unibuc.fmi.mycinema.mapper.CustomerMapper;
 import com.unibuc.fmi.mycinema.repository.CustomerRepository;
+import com.unibuc.fmi.mycinema.service.CommonService;
 import com.unibuc.fmi.mycinema.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class CustomerServiceImpl implements CustomerService, CommonService<CustomerDto, CustomerDto> {
 
     private final CustomerRepository customerRepository;
 
@@ -27,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto addCustomer(CustomerDto customerDto) {
+    public CustomerDto add(CustomerDto customerDto) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(customerDto.getEmail());
         if(optionalCustomer.isPresent()) {
             throw new UniqueConstraintException("There is already a customer with the same email address!");

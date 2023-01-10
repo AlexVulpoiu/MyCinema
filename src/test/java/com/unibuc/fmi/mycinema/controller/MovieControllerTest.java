@@ -48,7 +48,7 @@ public class MovieControllerTest {
     public void addMovieTest() throws Exception {
         NewMovieDto newMovieDto = MovieMocks.mockNewMovieDto();
         MovieDetailsDto movieDetailsDto = MovieMocks.mockMovieDetailsDto();
-        when(movieService.addMovie(newMovieDto)).thenReturn(movieDetailsDto);
+        when(movieService.add(newMovieDto)).thenReturn(movieDetailsDto);
 
         String newMovieDtoBody = objectMapper.writeValueAsString(newMovieDto);
         String movieDetailsDtoBody = objectMapper.writeValueAsString(movieDetailsDto);
@@ -66,7 +66,7 @@ public class MovieControllerTest {
     @Test
     public void addMovieThrowsUniqueConstraintException() throws Exception {
         NewMovieDto newMovieDto = MovieMocks.mockNewMovieDto();
-        when(movieService.addMovie(newMovieDto)).thenThrow(new UniqueConstraintException("There is already a movie with the same name!"));
+        when(movieService.add(newMovieDto)).thenThrow(new UniqueConstraintException("There is already a movie with the same name!"));
 
         String newMovieDtoBody = objectMapper.writeValueAsString(newMovieDto);
         mockMvc.perform(post("/movies")
@@ -78,7 +78,7 @@ public class MovieControllerTest {
     @Test
     public void addMovieThrowsEntityNotFoundExceptionTest() throws Exception {
         NewMovieDto newMovieDto = MovieMocks.mockNewMovieDto();
-        when(movieService.addMovie(newMovieDto)).thenThrow(new EntityNotFoundException("There is no actor with id: 1!"));
+        when(movieService.add(newMovieDto)).thenThrow(new EntityNotFoundException("There is no actor with id: 1!"));
 
         String newMovieDtoBody = objectMapper.writeValueAsString(newMovieDto);
         mockMvc.perform(post("/movies")

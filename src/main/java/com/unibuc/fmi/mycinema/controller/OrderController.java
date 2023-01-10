@@ -24,6 +24,6 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderDetailsDto> addOrder(@Valid @RequestBody OrderDto orderDto) {
-        return ResponseEntity.ok(orderService.addOrder(orderDto));
+        return ResponseEntity.ok(orderService.add(orderDto));
     }
 }

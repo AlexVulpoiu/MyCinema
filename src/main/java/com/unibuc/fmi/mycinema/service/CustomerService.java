@@ -6,7 +6,5 @@ import java.util.List;
 
 public interface CustomerService {
 
-    CustomerDto addCustomer(CustomerDto customerDto);
-
     List<CustomerDto> searchCustomers(String searchParam);
 }

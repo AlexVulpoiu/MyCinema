@@ -9,8 +9,6 @@ public interface ActorService {
 
     List<ActorDetailsDto> getActors();
 
-    ActorDto addActor(ActorDto actorDto);
-
     ActorDto editActor(Long id, ActorDto actorDto);
 
     ActorDto deleteActor(Long id);

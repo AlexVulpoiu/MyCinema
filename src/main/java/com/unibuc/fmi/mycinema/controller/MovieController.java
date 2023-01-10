@@ -25,7 +25,7 @@ public class MovieController {
 
     @PostMapping
     public ResponseEntity<MovieDetailsDto> addMovie(@Valid @RequestBody NewMovieDto movieDto) {
-        return ResponseEntity.ok(movieService.addMovie(movieDto));
+        return ResponseEntity.ok(movieService.add(movieDto));
     }
 
     @PostMapping("/search")

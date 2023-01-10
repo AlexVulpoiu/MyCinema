@@ -43,7 +43,7 @@ public class OrderControllerTest {
     public void addOrderTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
         OrderDetailsDto orderDetailsDto = OrderMocks.mockOrderDetailsDto();
-        when(orderService.addOrder(any())).thenReturn(orderDetailsDto);
+        when(orderService.add(any())).thenReturn(orderDetailsDto);
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         String orderDetailsDtoBody = objectMapper.writeValueAsString(orderDetailsDto);
@@ -62,7 +62,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsCustomerEntityNotFoundExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.addOrder(any())).thenThrow(new EntityNotFoundException("There is no customer with email " + orderDto.getCustomerEmail() + "!"));
+        when(orderService.add(any())).thenThrow(new EntityNotFoundException("There is no customer with email " + orderDto.getCustomerEmail() + "!"));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")
@@ -74,7 +74,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsMovieEntityNotFoundExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.addOrder(any())).thenThrow(new EntityNotFoundException("There is no movie with name " + orderDto.getMovieName() + "!"));
+        when(orderService.add(any())).thenThrow(new EntityNotFoundException("There is no movie with name " + orderDto.getMovieName() + "!"));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")
@@ -86,7 +86,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsRoomEntityNotFoundExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.addOrder(any())).thenThrow(new EntityNotFoundException("There is no room with name " + orderDto.getRoomName() + "!"));
+        when(orderService.add(any())).thenThrow(new EntityNotFoundException("There is no room with name " + orderDto.getRoomName() + "!"));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")
@@ -98,7 +98,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsMovieScheduleBadRequestExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.addOrder(any())).thenThrow(new BadRequestException("The selected movie is not scheduled at the requested date and time!"));
+        when(orderService.add(any())).thenThrow(new BadRequestException("The selected movie is not scheduled at the requested date and time!"));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")
@@ -110,7 +110,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsPastDateBadRequestExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.addOrder(any())).thenThrow(new BadRequestException("You can't make a reservation in the past!"));
+        when(orderService.add(any())).thenThrow(new BadRequestException("You can't make a reservation in the past!"));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")
@@ -122,7 +122,7 @@ public class OrderControllerTest {
     @Test
     public void addOrderThrowsNotEnoughTicketsBadRequestExceptionTest() throws Exception {
         OrderDto orderDto = OrderMocks.mockOrderDto();
-        when(orderService.addOrder(any())).thenThrow(new BadRequestException("There are not enough tickets to process your order!"));
+        when(orderService.add(any())).thenThrow(new BadRequestException("There are not enough tickets to process your order!"));
 
         String orderDtoBody = objectMapper.writeValueAsString(orderDto);
         mockMvc.perform(post("/orders")

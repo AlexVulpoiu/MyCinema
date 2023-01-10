@@ -8,7 +8,7 @@ import com.unibuc.fmi.mycinema.exception.BadRequestException;
 import com.unibuc.fmi.mycinema.exception.EntityNotFoundException;
 import com.unibuc.fmi.mycinema.mapper.OrderMapper;
 import com.unibuc.fmi.mycinema.repository.*;
-import com.unibuc.fmi.mycinema.service.OrderService;
+import com.unibuc.fmi.mycinema.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class OrderServiceImpl implements CommonService<OrderDetailsDto, OrderDto> {
 
     private final OrderRepository orderRepository;
 
@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDetailsDto addOrder(OrderDto orderDto) {
+    public OrderDetailsDto add(OrderDto orderDto) {
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(orderDto.getCustomerEmail());
         if(optionalCustomer.isEmpty()) {
             throw new EntityNotFoundException("There is no customer with email " + orderDto.getCustomerEmail() + "!");

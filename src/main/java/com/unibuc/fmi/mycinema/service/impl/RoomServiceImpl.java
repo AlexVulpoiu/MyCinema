@@ -7,6 +7,7 @@ import com.unibuc.fmi.mycinema.exception.EntityNotFoundException;
 import com.unibuc.fmi.mycinema.exception.UniqueConstraintException;
 import com.unibuc.fmi.mycinema.mapper.RoomMapper;
 import com.unibuc.fmi.mycinema.repository.RoomRepository;
+import com.unibuc.fmi.mycinema.service.CommonService;
 import com.unibuc.fmi.mycinema.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class RoomServiceImpl implements RoomService {
+public class RoomServiceImpl implements RoomService, CommonService<RoomDto, RoomDto> {
 
     private final RoomRepository roomRepository;
 
@@ -35,7 +36,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public RoomDto addRoom(RoomDto roomDto) {
+    public RoomDto add(RoomDto roomDto) {
         Optional<Room> optionalRoom = roomRepository.findByName(roomDto.getName());
         if(optionalRoom.isPresent()) {
             throw new UniqueConstraintException("There is already a cinema room with the same name!");

@@ -61,7 +61,7 @@ public class ActorControllerTest {
     @Test
     public void addActorTest() throws Exception {
         ActorDto actorDto = ActorMocks.mockActorDto();
-        when(actorService.addActor(any())).thenReturn(actorDto);
+        when(actorService.add(any())).thenReturn(actorDto);
 
         String actorDtoBody = objectMapper.writeValueAsString(actorDto);
         MvcResult result = mockMvc.perform(post("/actors")
@@ -75,7 +75,7 @@ public class ActorControllerTest {
     @Test
     public void addActorThrowsConflictExceptionTest() throws Exception {
         ActorDto actorDto = ActorMocks.mockActorDto();
-        when(actorService.addActor(any())).thenThrow(new UniqueConstraintException("There is already an actor with the same name!"));
+        when(actorService.add(any())).thenThrow(new UniqueConstraintException("There is already an actor with the same name!"));
 
         String actorDtoBody = objectMapper.writeValueAsString(actorDto);
         mockMvc.perform(post("/actors")

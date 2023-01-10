@@ -19,6 +19,7 @@ import com.unibuc.fmi.mycinema.repository.ActorRepository;
 import com.unibuc.fmi.mycinema.repository.MovieRepository;
 import com.unibuc.fmi.mycinema.repository.MovieScheduleRepository;
 import com.unibuc.fmi.mycinema.repository.RoomRepository;
+import com.unibuc.fmi.mycinema.service.CommonService;
 import com.unibuc.fmi.mycinema.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MovieServiceImpl implements MovieService {
+public class MovieServiceImpl implements MovieService, CommonService<MovieDetailsDto, NewMovieDto> {
 
     private final MovieRepository movieRepository;
 
@@ -56,7 +57,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieDetailsDto addMovie(NewMovieDto newMovieDto) {
+    public MovieDetailsDto add(NewMovieDto newMovieDto) {
         Optional<Movie> optionalMovie = movieRepository.findByName(newMovieDto.getName());
         if(optionalMovie.isPresent()) {
             throw new UniqueConstraintException("There is already a movie with the same name!");

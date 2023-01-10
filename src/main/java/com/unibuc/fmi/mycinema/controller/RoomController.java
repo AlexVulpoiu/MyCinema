@@ -28,7 +28,7 @@ public class RoomController {
 
     @PostMapping
     public ResponseEntity<RoomDto> addRoom(@Valid @RequestBody RoomDto roomDto) {
-        return ResponseEntity.ok(roomService.addRoom(roomDto));
+        return ResponseEntity.ok(roomService.add(roomDto));
     }
 
     @PutMapping("/{id}")

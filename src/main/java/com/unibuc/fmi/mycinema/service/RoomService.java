@@ -9,7 +9,5 @@ public interface RoomService {
 
     List<RoomDetailsDto> getRooms();
 
-    RoomDto addRoom(RoomDto roomDto);
-
     RoomDto editRoom(Long id, RoomDto roomDto);
 }

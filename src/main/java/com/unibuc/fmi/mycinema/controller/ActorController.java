@@ -28,7 +28,7 @@ public class ActorController {
 
     @PostMapping
     public ResponseEntity<ActorDto> addActor(@Valid @RequestBody ActorDto actorDto) {
-        return ResponseEntity.ok(actorService.addActor(actorDto));
+        return ResponseEntity.ok(actorService.add(actorDto));
     }
 
     @PutMapping("/{id}")

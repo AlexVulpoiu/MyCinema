@@ -60,7 +60,7 @@ public class RoomControllerTest {
     @Test
     public void addRoomTest() throws Exception {
         RoomDto roomDto = RoomMocks.mockRoomDto();
-        when(roomService.addRoom(any())).thenReturn(roomDto);
+        when(roomService.add(any())).thenReturn(roomDto);
 
         String roomDtoBody = objectMapper.writeValueAsString(roomDto);
         MvcResult result = mockMvc.perform(post("/rooms")
@@ -76,7 +76,7 @@ public class RoomControllerTest {
     @Test
     public void addRoomThrowsConflictExceptionTest() throws Exception {
         RoomDto roomDto = RoomMocks.mockRoomDto();
-        when(roomService.addRoom(any())).thenThrow(new UniqueConstraintException("There is already a cinema room with the same name!"));
+        when(roomService.add(any())).thenThrow(new UniqueConstraintException("There is already a cinema room with the same name!"));
 
         String roomDtoBody = objectMapper.writeValueAsString(roomDto);
         mockMvc.perform(post("/rooms")

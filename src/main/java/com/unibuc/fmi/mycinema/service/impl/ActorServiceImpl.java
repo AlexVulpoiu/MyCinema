@@ -9,6 +9,7 @@ import com.unibuc.fmi.mycinema.exception.UniqueConstraintException;
 import com.unibuc.fmi.mycinema.mapper.ActorMapper;
 import com.unibuc.fmi.mycinema.repository.ActorRepository;
 import com.unibuc.fmi.mycinema.service.ActorService;
+import com.unibuc.fmi.mycinema.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ActorServiceImpl implements ActorService {
+public class ActorServiceImpl implements ActorService, CommonService<ActorDto, ActorDto> {
 
     private final ActorRepository actorRepository;
 
@@ -36,7 +37,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public ActorDto addActor(ActorDto actorDto) {
+    public ActorDto add(ActorDto actorDto) {
         Optional<Actor> optionalActor = actorRepository.findByName(actorDto.getName());
         if(optionalActor.isPresent()) {
             throw new UniqueConstraintException("There is already an actor with the same name!");
